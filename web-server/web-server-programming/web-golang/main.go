@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"github.com/julienschmidt/httprouter"
+
+	db "github.com/conglt10/web-golang/database"
 	"github.com/conglt10/web-golang/middlewares"
 	"github.com/conglt10/web-golang/routes"
 	"github.com/joho/godotenv"
-	
+	"github.com/julienschmidt/httprouter"
 )
 
 func main() {
@@ -16,9 +17,11 @@ func main() {
 	if err != nil {
 		log.Fatalf("Error getting env, %v", err)
 	}
-	
+
+	// Initialize database
+	db.InitDatabase()
 	router := httprouter.New()
-	
+
 	router.POST("/auth/login", routes.Login)
 	router.POST("/auth/register", routes.Register)
 

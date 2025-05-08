@@ -4,8 +4,8 @@ POST http://localhost:8000/auth/login
 Content-Type: application/json
 
 {
-    "username": "testuser",
-    "password": "testuser"
+    "username": "test2",
+    "password": "123456"
 }
 
 ### Set auth token from login response
@@ -16,9 +16,9 @@ POST http://localhost:8000/auth/register
 Content-Type: application/json
 
 {
-    "username": "johndoe",
-    "password": "your_password",
-    "email": "john@example.com"
+    "username": "test2",
+    "email": "test2@gmail.com",
+    "password": "123456"
 }
 
 ### Get All Posts
@@ -35,22 +35,18 @@ Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
 {
-    "title": "My First Post",
-    "content": "This is the content of my post",
-    "tags": ["technology", "programming"]
+    "title":"This is a new post 2"
 }
 
 ### Edit Post
-PUT http://localhost:8000/posts/123
+PUT http://localhost:8000/posts/dbc6de99-dee7-4f54-8f8b-d0806505c5ef
 Content-Type: application/json
 Authorization: Bearer {{auth_token}}
 
 {
-    "title": "Updated Post Title",
-    "content": "Updated content of my post",
-    "tags": ["technology", "programming", "golang"]
+    "title": "Updated Post Title"
 }
 
 ### Delete Post
-DELETE http://localhost:8000/posts/123
+DELETE http://localhost:8000/posts/84ae1587-668d-4cad-b605-59064b6acac3
 Authorization: Bearer {{auth_token}}
