@@ -3,9 +3,10 @@ package middlewares
 import (
 	"errors"
 	"net/http"
+
+	jwt "github.com/conglt10/web-golang/auth"
+	res "github.com/conglt10/web-golang/utils"
 	"github.com/julienschmidt/httprouter"
-	"github.com/conglt10/web-golang/auth"
-	"github.com/conglt10/web-golang/utils"
 )
 
 func CheckJwt(next httprouter.Handle) httprouter.Handle {
@@ -20,6 +21,3 @@ func CheckJwt(next httprouter.Handle) httprouter.Handle {
 		next(w, r, ps)
 	}
 }
-
-
-

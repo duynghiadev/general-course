@@ -1,8 +1,7 @@
 package models
 
-
 type Post struct {
-	id string
+	id      string
 	creater string
-	title string
+	title   string
 }

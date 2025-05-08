@@ -101,7 +101,10 @@ func Register(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	decoder.DisallowUnknownFields()
 
 	if err := decoder.Decode(&req); err != nil {
-		res.JSON(w, http.StatusBadRequest, map[string]string{"error": "Invalid request body", "details": err.Error()})
+		res.JSON(w, http.StatusBadRequest, map[string]string{
+			"error":   "Invalid request body",
+			"details": err.Error(),
+		})
 		return
 	}
 	defer r.Body.Close()
@@ -136,7 +139,10 @@ func Register(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 	// Check if user or email exists
 	var result bson.M
-	err := collection.FindOne(ctx, bson.M{"$or": []bson.M{{"username": username}, {"email": email}}}).Decode(&result)
+	err := collection.FindOne(ctx, bson.M{"$or": []bson.M{
+		{"username": username},
+		{"email": email},
+	}}).Decode(&result)
 	if err == nil {
 		res.JSON(w, http.StatusConflict, "Username or email already exists")
 		return
