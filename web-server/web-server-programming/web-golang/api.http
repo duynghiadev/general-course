@@ -1,0 +1,56 @@
+### Login
+# @name login
+POST http://localhost:8000/auth/login
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "password": "testuser"
+}
+
+### Set auth token from login response
+@auth_token = {{login.response.body.token}}
+
+### Register
+POST http://localhost:8000/auth/register
+Content-Type: application/json
+
+{
+    "username": "johndoe",
+    "password": "your_password",
+    "email": "john@example.com"
+}
+
+### Get All Posts
+GET http://localhost:8000/posts
+Authorization: Bearer {{auth_token}}
+
+### Get My Posts
+GET http://localhost:8000/me/posts
+Authorization: Bearer {{auth_token}}
+
+### Create Post
+POST http://localhost:8000/posts
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+    "title": "My First Post",
+    "content": "This is the content of my post",
+    "tags": ["technology", "programming"]
+}
+
+### Edit Post
+PUT http://localhost:8000/posts/123
+Content-Type: application/json
+Authorization: Bearer {{auth_token}}
+
+{
+    "title": "Updated Post Title",
+    "content": "Updated content of my post",
+    "tags": ["technology", "programming", "golang"]
+}
+
+### Delete Post
+DELETE http://localhost:8000/posts/123
+Authorization: Bearer {{auth_token}}
