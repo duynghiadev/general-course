@@ -94,7 +94,7 @@ func CreatePost(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	decoder := json.NewDecoder(r.Body)
 	decoder.DisallowUnknownFields()
 
-	if err := decoder.Decode(&req); err != nil {
+	if err = decoder.Decode(&req); err != nil {
 		res.JSON(w, http.StatusBadRequest, map[string]string{"error": "Invalid request body", "details": err.Error()})
 		return
 	}
@@ -137,7 +137,7 @@ func EditPost(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	decoder := json.NewDecoder(r.Body)
 	decoder.DisallowUnknownFields()
 
-	if err := decoder.Decode(&req); err != nil {
+	if err = decoder.Decode(&req); err != nil {
 		res.JSON(w, http.StatusBadRequest, map[string]string{"error": "Invalid request body", "details": err.Error()})
 		return
 	}

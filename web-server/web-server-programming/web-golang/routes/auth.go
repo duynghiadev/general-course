@@ -72,7 +72,7 @@ func Login(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 		return
 	}
 
-	if err := models.CheckPasswordHash(hashedPassword, password); err != nil {
+	if err = models.CheckPasswordHash(hashedPassword, password); err != nil {
 		res.JSON(w, http.StatusUnauthorized, "Username or Password incorrect")
 		return
 	}
