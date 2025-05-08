@@ -31,7 +31,10 @@ func Login(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	decoder.DisallowUnknownFields()
 
 	if err := decoder.Decode(&req); err != nil {
-		res.JSON(w, http.StatusBadRequest, map[string]string{"error": "Invalid request body", "details": err.Error()})
+		res.JSON(w, http.StatusBadRequest, map[string]string{
+			"error":   "Invalid request body",
+			"details": err.Error(),
+		})
 		return
 	}
 	defer r.Body.Close()
