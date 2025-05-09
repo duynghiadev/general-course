@@ -4,9 +4,11 @@ import (
 	"context"
 	"log"
 	"os"
+	"strings"
 	"sync"
 	"time"
 
+	"github.com/joho/godotenv"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -16,6 +18,13 @@ var (
 	client *mongo.Client
 	once   sync.Once
 )
+
+func init() {
+	// Load .env file
+	if err := godotenv.Load(); err != nil {
+		log.Printf("Warning: .env file not found: %v", err)
+	}
+}
 
 func InitDatabase() {
 	// Initialize collections and indexes
@@ -38,7 +47,7 @@ func initUsers() {
 		},
 	)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Warning: Failed to create username index: %v", err)
 	}
 
 	// Create unique index for email
@@ -50,7 +59,7 @@ func initUsers() {
 		},
 	)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Warning: Failed to create email index: %v", err)
 	}
 }
 
@@ -67,7 +76,7 @@ func initPosts() {
 		},
 	)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Warning: Failed to create user_id index: %v", err)
 	}
 
 	// Create index for created_at for sorting
@@ -78,35 +87,58 @@ func initPosts() {
 		},
 	)
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Warning: Failed to create created_at index: %v", err)
 	}
 }
 
 // connectDB creates a singleton MongoDB client
 func connectDB() *mongo.Client {
 	once.Do(func() {
-		clientOptions := options.Client().ApplyURI(os.Getenv("MONGODB_URI"))
-		var err error
-		client, err = mongo.Connect(context.Background(), clientOptions)
-		if err != nil {
-			log.Fatal(err)
+		mongoURI := os.Getenv("MONGODB_URI")
+		if mongoURI == "" {
+			log.Fatal("MONGODB_URI not set in environment")
 		}
 
-		// Check the connection
-		err = client.Ping(context.Background(), nil)
-		if err != nil {
-			log.Fatal(err)
+		if !strings.HasPrefix(mongoURI, "mongodb://") && !strings.HasPrefix(mongoURI, "mongodb+srv://") {
+			mongoURI = "mongodb://" + mongoURI
 		}
+
+		clientOptions := options.Client().
+			ApplyURI(mongoURI).
+			SetConnectTimeout(10 * time.Second).
+			SetServerSelectionTimeout(5 * time.Second)
+
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+
+		var err error
+		client, err = mongo.Connect(ctx, clientOptions)
+		if err != nil {
+			log.Fatal("Failed to connect to MongoDB:", err)
+		}
+
+		err = client.Ping(ctx, nil)
+		if err != nil {
+			log.Fatal("Failed to ping MongoDB:", err)
+		}
+
+		log.Println("Successfully connected to MongoDB")
 	})
 	return client
 }
 
 func ConnectUsers() *mongo.Collection {
-	client := connectDB()
-	return client.Database(os.Getenv("DB_NAME")).Collection("users")
+	dbName := os.Getenv("DB_NAME")
+	if dbName == "" {
+		dbName = "demo-web-server-2"
+	}
+	return connectDB().Database(dbName).Collection("users")
 }
 
 func ConnectPosts() *mongo.Collection {
-	client := connectDB()
-	return client.Database(os.Getenv("DB_NAME")).Collection("posts")
+	dbName := os.Getenv("DB_NAME")
+	if dbName == "" {
+		dbName = "demo-web-server-2"
+	}
+	return connectDB().Database(dbName).Collection("posts")
 }

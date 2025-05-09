@@ -84,6 +84,13 @@ func GetMyPosts(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 func CreatePost(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 	w.Header().Set("Content-Type", "application/json")
 
+	// Kiểm tra Authorization header trước
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" {
+		res.JSON(w, http.StatusUnauthorized, "Token không được cung cấp")
+		return
+	}
+
 	creater, err := jwt.ExtractUsernameFromToken(r)
 	if err != nil {
 		res.JSON(w, http.StatusUnauthorized, "Invalid or missing token")
@@ -125,6 +132,13 @@ func CreatePost(w http.ResponseWriter, r *http.Request, _ httprouter.Params) {
 
 func EditPost(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 	w.Header().Set("Content-Type", "application/json")
+
+	// Kiểm tra Authorization header trước
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" {
+		res.JSON(w, http.StatusUnauthorized, "Token không được cung cấp")
+		return
+	}
 
 	id := ps.ByName("id")
 	username, err := jwt.ExtractUsernameFromToken(r)
@@ -179,6 +193,13 @@ func EditPost(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
 }
 
 func DeletePost(w http.ResponseWriter, r *http.Request, ps httprouter.Params) {
+	// Kiểm tra Authorization header trước
+	authHeader := r.Header.Get("Authorization")
+	if authHeader == "" {
+		res.JSON(w, http.StatusUnauthorized, "Token không được cung cấp")
+		return
+	}
+
 	id := ps.ByName("id")
 	username, err := jwt.ExtractUsernameFromToken(r)
 	collection := db.ConnectPosts()
