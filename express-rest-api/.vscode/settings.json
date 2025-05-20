@@ -1,0 +1,20 @@
+{
+  "folder-customization.folders": [
+    {
+      "path": "express-rest-api\\src\\cacheHelper\\",
+      "badge": "CH"
+    },
+    {
+      "path": "express-rest-api\\src\\service\\",
+      "badge": "SV"
+    },
+    {
+      "path": "express-rest-api\\src\\controller\\",
+      "badge": "CT"
+    },
+    {
+      "path": "express-rest-api\\src\\repository\\",
+      "badge": "RP"
+    }
+  ]
+}

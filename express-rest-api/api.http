@@ -1,0 +1,33 @@
+@baseUrl = http://localhost:8000
+
+### check connection
+GET {{baseUrl}}/ping
+
+### Get all participants
+GET {{baseUrl}}/participants
+
+### Get participant by id
+GET {{baseUrl}}/participants/64a1b2c3d4e5f6a7b8c9d0e1
+
+### Create participant
+POST {{baseUrl}}/participants
+Content-Type: application/json
+
+{
+  "name": "John Doe",
+  "age": 35,
+  "role": "actor"
+}
+
+### Update participant
+PUT {{baseUrl}}/participants/682c0380253392586644976d
+Content-Type: application/json
+
+{
+  "name": "John Doe Updated",
+  "age": 36,
+  "role": "director"
+}
+
+### Delete participant
+DELETE {{baseUrl}}/participants/682c0380253392586644976d
