@@ -72,3 +72,49 @@ A detailed comparison of performance characteristics between Node.js and Go, bas
 - Date of benchmark
 - Any specific conditions or limitations
 - Suggestions for further testing
+
+---
+
+# Go vs Node.js Performance Benchmark
+
+This repo compares performance between Node.js and Go using three benchmark types:
+
+1. Loop Performance
+2. Concurrency Test
+3. HTTP Benchmark (`/ping` endpoint using wrk)
+
+## Structure
+
+- `node_test/`: Node.js benchmarks using Express
+- `go_test/`: Go benchmarks using Fiber
+- `wrk_scripts/`: Shell scripts for HTTP benchmarking
+
+## Requirements
+
+- Node.js v22+
+- Go 1.24+
+- wrk (install via `brew install wrk` or build manually)
+
+## Usage
+
+### Node.js
+
+```bash
+cd node_test
+npx esbuild index.js --bundle --platform=node --outfile=dist/index.js
+node dist/index.js
+```
+
+## Go
+
+```bash
+cd go_test
+go build -o benchmark-test main.go
+./benchmark-test
+```
+
+## Run HTTP Benchmark
+
+```bash
+wrk_scripts/run_benchmark.sh
+```
