@@ -12,7 +12,7 @@ func loopTest() {
 	for i := int64(1); i <= 1_000_000_000; i++ {
 		sum += i
 	}
-	fmt.Println("Sum:", sum)
+	fmt.Println("Loop test Sum:", sum)
 }
 
 func concurrencyTest() {
@@ -37,8 +37,8 @@ func main() {
 
 	go func() {
 		// Uncomment one of the following to test:
-		// loopTest()
-		// concurrencyTest()
+		loopTest()
+		concurrencyTest()
 	}()
 
 	app.Listen(":3001")
